@@ -6,6 +6,8 @@ Personal portfolio project for financial analytics and applied AI. The default b
 
 ## Project overview and media
 
+"https://github.com/Ashish1400/portfoliolens-ai/blob/main/PortfolioLens_AI_Cover.png"
+
 ## The business question
 
 A portfolio analyst needs to see whether delinquency is changing, where exposure is concentrated, whether data exceptions affect the report, and which loans deserve closer research. A dashboard answers the numerical questions; the model demonstrates prioritization; the copilot retrieves the exact metrics and their definitions.
