@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+data/
+artifacts/
+*.sqlite
+*.pkl
+node_modules/
+.hyperframes/
