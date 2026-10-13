@@ -6,16 +6,6 @@ Personal portfolio project for financial analytics and applied AI. The default b
 
 ## Project overview and media
 
-[![PortfolioLens AI cover](media/PortfolioLens_AI_Cover.png)](media/PortfolioLens_AI_28s.mp4)
-
-- [Watch or download the 28-second video](media/PortfolioLens_AI_28s.mp4)
-- [Open the detailed project guide](docs/PROJECT_GUIDE.md)
-- [View the model and data-quality evidence](docs/reference/)
-- [Download the self-contained dashboard preview](demo/PortfolioLens_Demo.html), then open the file locally. This preview uses prepared sample answers; the Python app supports new questions within its evidence scope.
-- [Get the LinkedIn post and project copy](media/)
-
-Prepared for a standalone `portfoliolens-ai` repository. GitHub publishing was blocked by the connection permissions; this package has not been uploaded.
-
 ## The business question
 
 A portfolio analyst needs to see whether delinquency is changing, where exposure is concentrated, whether data exceptions affect the report, and which loans deserve closer research. A dashboard answers the numerical questions; the model demonstrates prioritization; the copilot retrieves the exact metrics and their definitions.
