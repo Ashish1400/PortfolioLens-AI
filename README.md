@@ -6,7 +6,7 @@ Personal portfolio project for financial analytics and applied AI. The default b
 
 ## Project overview and media
 
-"https://github.com/Ashish1400/portfoliolens-ai/blob/main/PortfolioLens_AI_Cover.png"
+<a href="https://github.com/Ashish1400/portfoliolens-ai/blob/main/PortfolioLens_AI_28s.mp4"> <img src="https://github.com/Ashish1400/portfoliolens-ai/blob/main/PortfolioLens_AI_Cover.png"> </a>
 
 ## The business question
 
