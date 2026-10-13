@@ -1,0 +1,76 @@
+// Import fact_loan_snapshot.csv and dim_loan.csv. Link DimLoan[loan_id] 1:* FactSnapshot[loan_id].
+// Rename those imported tables to FactSnapshot and DimLoan.
+// DimMonth is a calculated table with one row per observation month.
+DimMonth =
+ADDCOLUMNS (
+    DISTINCT ( SELECTCOLUMNS ( FactSnapshot, "MonthStart", FactSnapshot[snapshot_month] ) ),
+    "MonthLabel", FORMAT ( [MonthStart], "MMM yyyy" ),
+    "MonthSort", YEAR ( [MonthStart] ) * 100 + MONTH ( [MonthStart] )
+)
+// Link DimMonth[MonthStart] 1:* FactSnapshot[snapshot_month]; single filter direction.
+// The following are SEPARATE measures; paste each individually.
+
+Reporting Month = MAX ( FactSnapshot[snapshot_month] )
+
+Ending Principal =
+VAR AsOf = [Reporting Month]
+RETURN CALCULATE (
+    SUM ( FactSnapshot[ending_balance] ),
+    REMOVEFILTERS ( DimMonth ),
+    FactSnapshot[snapshot_month] = AsOf
+)
+
+30+ DPD Principal =
+VAR AsOf = [Reporting Month]
+RETURN CALCULATE (
+    SUM ( FactSnapshot[ending_balance] ),
+    REMOVEFILTERS ( DimMonth ),
+    FactSnapshot[snapshot_month] = AsOf,
+    FactSnapshot[days_past_due] >= 30
+)
+
+30+ DPD Rate = DIVIDE ( [30+ DPD Principal], [Ending Principal] )
+
+60+ DPD Principal =
+VAR AsOf = [Reporting Month]
+RETURN CALCULATE (
+    SUM ( FactSnapshot[ending_balance] ),
+    REMOVEFILTERS ( DimMonth ),
+    FactSnapshot[snapshot_month] = AsOf,
+    FactSnapshot[days_past_due] >= 60
+)
+
+60+ DPD Rate = DIVIDE ( [60+ DPD Principal], [Ending Principal] )
+
+Active Loans =
+VAR AsOf = [Reporting Month]
+RETURN CALCULATE (
+    DISTINCTCOUNT ( FactSnapshot[loan_id] ),
+    REMOVEFILTERS ( DimMonth ),
+    FactSnapshot[snapshot_month] = AsOf,
+    FactSnapshot[ending_balance] > 0
+)
+
+Monthly Chargeoff =
+VAR AsOf = [Reporting Month]
+RETURN CALCULATE (
+    SUM ( FactSnapshot[chargeoff] ),
+    REMOVEFILTERS ( DimMonth ),
+    FactSnapshot[snapshot_month] = AsOf
+)
+
+30+ DPD Previous Month =
+VAR PriorMonth = EDATE ( [Reporting Month], -1 )
+RETURN CALCULATE (
+    [30+ DPD Rate],
+    REMOVEFILTERS ( DimMonth ),
+    FactSnapshot[snapshot_month] = PriorMonth
+)
+
+30+ DPD Change Bps = ( [30+ DPD Rate] - [30+ DPD Previous Month] ) * 10000
+
+Ledger Residual =
+SUMX ( FactSnapshot,
+    FactSnapshot[opening_balance] + FactSnapshot[funding]
+    - FactSnapshot[principal_paid] - FactSnapshot[chargeoff] - FactSnapshot[ending_balance]
+)
